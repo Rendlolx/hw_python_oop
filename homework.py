@@ -130,8 +130,7 @@ def read_package(workout_type: str, data: list) -> Training:
         "RUN": Running,
         "WLK": SportsWalking
     }
-    right_keys_for_training: str = (
-        ', '.join('{}'.format(key) for key in training_name.keys()))
+    right_keys_for_training: str = ', '.join(training_name)
 
     if workout_type not in training_name:
         raise ValueError(
