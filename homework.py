@@ -1,6 +1,5 @@
-import dataclasses
-from dataclasses import dataclass
-from typing import Dict, List, Union
+from dataclasses import asdict, dataclass
+from typing import Dict, Type
 
 
 @dataclass
@@ -20,7 +19,7 @@ class InfoMessage:
         "Потрачено ккал: {calories:.3f}.")
 
     def get_message(self) -> str:
-        return self.MESSAGE.format(**dataclasses.asdict(self))
+        return self.MESSAGE.format(**asdict(self))
 
 
 class Training:
@@ -126,17 +125,19 @@ class Swimming(Training):
 
 def read_package(workout_type: str, data: list) -> Training:
     """Прочитать данные полученные от датчиков."""
-    training_name: Dict[str, List: Union[int, float]] = {
+    training_name: Dict[str, Type[Training]] = {
         "SWM": Swimming,
         "RUN": Running,
         "WLK": SportsWalking
     }
+    right_keys_for_training: str = (
+        ', '.join('{}'.format(key) for key in training_name.keys()))
 
     if workout_type not in training_name:
         raise ValueError(
             f"Отсутствует такой тип тренировки как "
             f"{workout_type}. Для корректной работы выберите другой вид "
-            f"тренировки: {training_name.keys()}")
+            f"тренировки: {right_keys_for_training}")
 
     return training_name[workout_type](*data)
 
